@@ -8,14 +8,14 @@
   "license": "MIT",
   "scripts": {
     "reset": "del .git && git init",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "watch": "watch 'npm run lint && npm run build' src/ public/",
+    "lint": "tslint -c tslint.yml 'src/**/*.ts'",
+    "watch": "watch 'yarn lint && yarn build' src/ public/",
     "build": "webpack",
     "clasp": "cd build/ && clasp",
-    "push": "npm run clasp push",
-    "open": "npm run clasp open",
-    "deploy": "npm run clasp deploy",
-    "watch:push": "watch 'npm run lint && npm run build && npm run push' src/ public/"
+    "push": "yarn clasp push",
+    "open": "yarn clasp open",
+    "deploy": "yarn clasp deploy",
+    "watch:push": "watch 'yarn lint --fix && yarn build && yarn push' src/ public/"
   },
   "sideEffects": [
     "./public/*"
@@ -28,8 +28,11 @@
     "del-cli": "^1.1.0",
     "es3ify-webpack-plugin": "^0.0.1",
     "gas-webpack-plugin": "^0.3.0",
-    "tslint": "^5.11.0",
-    "typescript": "^2.9.2",
+    "prettier": "1.17.1",
+    "tslint": "5.16.0",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-etc": "1.5.2",
+    "typescript": "3.4.5",
     "watch": "^1.0.2",
     "webpack": "^3.5.6"
   }

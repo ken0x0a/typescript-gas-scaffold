@@ -23,6 +23,12 @@ export class Spreadsheet {
 
   public spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet
   constructor(param: SpreadsheetParams = {}) {
+    // const tmpSs: GoogleAppsScript.Spreadsheet.Spreadsheet = param.fileId
+    //   ? SpreadsheetApp.openById(param.fileId)
+    //   : param.fileUrl
+    //   ? SpreadsheetApp.openByUrl(param.fileUrl)
+    //   : SpreadsheetApp.getActive()
+
     let tmpSs: GoogleAppsScript.Spreadsheet.Spreadsheet = null
     if (param.fileId) {
       tmpSs = SpreadsheetApp.openById(param.fileId)
@@ -44,13 +50,59 @@ export class Spreadsheet {
     const { reverseFlg, columnStr } = this.shapingColumnStr(column)
     const range = sheet.getRange(columnStr)
     const values = {}
-    const rows = range.getValues().filter(row => row[0])
+    const rows = range.getValues().filter((row) => row[0])
     if (reverseFlg) {
-      rows.forEach(r => values[r[r.length - 1].toString()] = r[0].toString())
+      rows.forEach((r) => (values[r[r.length - 1].toString()] = r[0].toString()))
     } else {
-      rows.forEach(r => values[r[0].toString()] = r[r.length - 1])
+      rows.forEach((r) => (values[r[0].toString()] = r[r.length - 1]))
     }
     return values
+  }
+
+  /**
+   * rotateSheet: rotate target sheet
+   * @param sheetName sheet to be rotated
+   * @param options RotateSheetOpt
+   * @param options.hideCopy hide copied sheet, default: true
+   * @param options.rotatedName name of copied sheet, default: sheetName_yyyy-MM-dd
+   * @param options.useHeader set sheet header, default: true
+   */
+  public rotateSheet(sheetName: string, options: RotateSheetOpt = {}) {
+    const SS = this.spreadsheet
+    const sheet = SS.getSheetByName(sheetName)
+    if (!sheet) {
+      throw new Error('No Available Sheet!')
+    }
+    const now = new Date()
+    const dateString = Utilities.formatDate(now, 'UTC', 'yyyy-MM-dd')
+
+    let { rotatedName, useHeader, hideCopy } = options
+    rotatedName = rotatedName || `${sheetName}_${dateString}`
+    useHeader = useHeader || true
+    hideCopy = hideCopy || true
+
+    if (!useHeader) {
+      useHeader = true
+    }
+    let copiedSheet = SS.getSheetByName(rotatedName)
+    if (copiedSheet !== null) {
+      throw new Error(`Sheet ${rotatedName} Exsits!`)
+    }
+    const sheetsNum = SS.getNumSheets()
+    copiedSheet = SS.insertSheet(rotatedName, sheetsNum, { template: sheet })
+    if (useHeader) {
+      const range = sheet.getRange('1:1')
+      const row = range.getValues()[0]
+      Logger.log(row)
+      sheet.clearContents()
+      sheet.appendRow(row)
+    } else {
+      sheet.clear()
+    }
+    if (hideCopy) {
+      copiedSheet.hideSheet()
+    }
+    return { sheet, copiedSheet }
   }
 
   /**
@@ -74,69 +126,30 @@ export class Spreadsheet {
         keyLocats[k] = i + offset
       }
     })
-    keys.forEach(k => {
+    keys.forEach((k) => {
       const cellId = `${valCol.replace(/\d+/, '')}${keyLocats[k]}`
       const cell = sheet.getRange(cellId)
       cell.setValue(params[k])
     })
   }
 
-  /**
-   * rotateSheet: rotate target sheet
-   * @param sheetName sheet to be rotated
-   * @param options RotateSheetOpt
-   * @param options.hideCopy hide copied sheet, default: true
-   * @param options.rotatedName name of copied sheet, default: sheetName_yyyy-MM-dd
-   * @param options.useHeader set sheet header, default: true
-   */
-  public rotateSheet(sheetName: string, options: RotateSheetOpt = {}) {
-    const SS = this.spreadsheet
-    const sheet = SS.getSheetByName(sheetName)
-    if (!sheet) { throw new Error('No Available Sheet!') }
-    const now = new Date()
-    const dateString = Utilities.formatDate(now, 'UTC', 'yyyy-MM-dd')
-
-    let { rotatedName, useHeader, hideCopy } = options
-    rotatedName = rotatedName || `${sheetName}_${dateString}`
-    useHeader = useHeader || true
-    hideCopy = hideCopy || true
-
-    if (!useHeader) { useHeader = true }
-    let copiedSheet = SS.getSheetByName(rotatedName)
-    if (copiedSheet !== null) { throw new Error(`Sheet ${rotatedName} Exsits!`) }
-    const sheetsNum = SS.getNumSheets()
-    copiedSheet = SS.insertSheet(rotatedName, sheetsNum, { template: sheet })
-    if (useHeader) {
-      const range = sheet.getRange('1:1')
-      const row = range.getValues()[0]
-      Logger.log(row)
-      sheet.clearContents()
-      sheet.appendRow(row)
-    } else {
-      sheet.clear()
-    }
-    if (hideCopy) {
-      copiedSheet.hideSheet()
-    }
-    return { sheet, copiedSheet }
-  }
-
   private getSheetByName(sheetName?: string) {
-    let sheet = null
-    if (sheetName) {
-      sheet = this.spreadsheet.getSheetByName(sheetName)
-    } else {
-      sheet = this.spreadsheet.getActiveSheet()
+    const sheet = sheetName
+      ? this.spreadsheet.getSheetByName(sheetName)
+      : this.spreadsheet.getActiveSheet()
+
+    if (!sheet) {
+      throw new Error('No Available Sheet!')
     }
-    if (!sheet) { throw new Error('No Available Sheet!') }
     return sheet
   }
 
   private shapingColumnStr(column: string) {
-    let [l1, l2] = column.split(':').map(l => l.toUpperCase())
+    let [l1, l2] = column.split(':').map((l) => l.toUpperCase())
     let reverseFlg = false
     if (l1 > l2) {
-      reverseFlg = true; [l2, l1] = [l1, l2]
+      reverseFlg = true
+      ;[l2, l1] = [l1, l2]
     }
     let offset = 1
     if (l1.match(/(\d+)/)) {
@@ -153,13 +166,13 @@ export class Spreadsheet {
 }
 
 interface SpreadsheetParams {
-  fileId?: string,
-  fileUrl?: string,
+  fileId?: string
+  fileUrl?: string
   sheetName?: string
 }
 
 interface RotateSheetOpt {
-  hideCopy?: boolean,
-  rotatedName?: string,
+  hideCopy?: boolean
+  rotatedName?: string
   useHeader?: boolean
 }

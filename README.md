@@ -1,3 +1,9 @@
+https://docs.google.com/spreadsheets/d/1z2J82UBCt3IAoygfZjSg7pe6dKq9MhwuCijbUSek-7o/edit#gid=1167253568
+https://script.google.com/d/1mqS29NCynL6WrVpzvkYWYlbSGg3AAnvnvmJM-kMOTrjE1KVGZaeDO76P/edit?uiv=2&mid=ACjPJvH-SOnN-AOqxgAEJQYvuRsyUyNa3822D7M_8roPYeavEO7eQe2HD-sCLRgVBd8UvfInbtEBKDgExvniK-abH-cNjUqN21aGP1B8fs58N1P4fsdz-_2GCZeFUc6WqCM7kY7oL3092V0YW1crJxlUt-1fvMfisyA73PZdtnQcTnHS-oATZIpX6YqmSQ&splash=yes
+
+https://script.google.com/macros/s/AKfycbwmdWrrv2Hi_J7vk1IgGfSTKT4p4-qMDuMukukVvTS9/dev
+https://script.google.com/macros/s/AKfycbwVRc9JhZIxYSY9Ziu88znyeIURhH8jI5uVSsfFdP0HO-8VEzdD/exec
+
 # GAS Typescript Scaffold
 [![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg)](https://github.com/google/clasp)
 
@@ -32,7 +38,7 @@ $ npm run reset
 ## Usage
 ### Development
 
-If you watnt to use watch mode,
+If you want to use watch mode,
 
 ```sh
 $ npm run watch

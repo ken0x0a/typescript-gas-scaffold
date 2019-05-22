@@ -6,3 +6,11 @@ setup:
 
 setup2:
 	yarn clasp clone $(SCRIPT_ID)
+
+enable.api:
+	open https://script.google.com/home/usersettings
+build.push:
+	yarn run watch:push
+
+open:
+	yarn clasp open

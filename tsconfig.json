@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "rootDir": ".",
+    // "outDir": "./dist",
     "alwaysStrict": true,
     "baseUrl": "./"
   },
   "include": [
+    "./build/**/*.ts",
     "./src/**/*"
   ]
 }

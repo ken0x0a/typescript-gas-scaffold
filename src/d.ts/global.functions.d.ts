@@ -1,11 +1,12 @@
 interface Global {
-  test(): void
   doGet(e): any
   doPost(e): any
   fetchSampleJson(): any
-  SheetDemo(): any
+  plus1(num: number): void
   RotateLogDeme(): any
+  SheetDemo(): any
   SlackDemo(): any
+  test(): void
 }
 
 declare var global: Global

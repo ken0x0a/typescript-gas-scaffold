@@ -1,17 +1,23 @@
-import { Slack, Spreadsheet as S, Transport as T } from './lib/'
+import {
+  // Slack,
+  Spreadsheet as S,
+  Transport as T,
+} from './lib/'
 import { Test } from './Test'
 
-global.test = () => {
-  const test = new Test()
-  test.echo('new world.')
+export const test = () => {
+  const _test = new Test()
+  _test.echo('new world. YEY!!')
 }
-
+export const plus1 = (num: number) => {
+  return num + 1
+}
 // curl -L https://script.google.com/macros/s/<YOUR-GAS-APP-ID>/exec?res=[text|html|html_from_file|json|redirect_to]
-global.doGet = (e) => {
+export const doGet = (e) => {
   Logger.log(JSON.stringify(e))
   // Need run on dev console and apply your app can connect to Spreadsheets
   const sheet = S.connect()
-  sheet.appendRow([(new Date()).toLocaleString(), JSON.stringify(e)])
+  sheet.appendRow([new Date().toLocaleString(), JSON.stringify(e)])
   let params = ''
   if (e && e.parameter && e.parameter.res) {
     params = e.parameter.res.toString()
@@ -33,7 +39,7 @@ global.doGet = (e) => {
   }
 }
 
-global.fetchSampleJson = () => {
+export const fetchSampleJson = () => {
   // Need run on dev console and apply your app can connect to outsite service
   const url = 'https://raw.githubusercontent.com/LearnWebCode/json-example/master/animals-1.json'
   const res = T.get(url)
@@ -42,15 +48,11 @@ global.fetchSampleJson = () => {
   // will output: [Meowsy, Barky, Purrpaws]
 }
 
-global.SheetDemo = () => {
+export const SheetDemo = () => {
   // Insert Demo Data
-  const demoData = [
-    ['key1', 'key_0001'],
-    ['key2', 'key_0002'],
-    ['key3', 'key_0003'],
-  ]
+  const demoData = [['key1', 'key_0001'], ['key2', 'key_0002'], ['key3', 'key_0003']]
   const sheet = S.connect()
-  demoData.forEach(row => {
+  demoData.forEach((row) => {
     sheet.appendRow(row)
   })
   const ss = new S()
@@ -65,7 +67,7 @@ global.SheetDemo = () => {
   ss.updateValsByKeys({ key_0002: 'new_val_2' }, 'B2:A10')
 }
 
-global.RotateLogDeme = () => {
+export const RotateLogDeme = () => {
   const maxLogNum = 10
 
   const logSheet = S.connect({ sheetName: 'logs' })
@@ -76,7 +78,7 @@ global.RotateLogDeme = () => {
   }
 }
 
-global.SlackDemo = () => {
+export const SlackDemo = () => {
   /*
   const slackText = '<!here> <@slackId> Hello World!'
   const url = 'https://hooks.slack.com/services/...<YOUR-WEBHOOK>'

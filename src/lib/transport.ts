@@ -1,14 +1,14 @@
 export class Transport {
+
+  public static get(url: string): GoogleAppsScript.URL_Fetch.HTTPResponse {
+    return UrlFetchApp.fetch(url)
+  }
   public static html(rawHtml: string): GoogleAppsScript.HTML.HtmlOutput {
     return HtmlService.createHtmlOutput(rawHtml)
   }
 
   public static htmlFromFile(path: string): GoogleAppsScript.HTML.HtmlOutput {
     return HtmlService.createHtmlOutputFromFile(path).setSandboxMode(HtmlService.SandboxMode.IFRAME)
-  }
-
-  public static text(value: string): GoogleAppsScript.Content.TextOutput {
-    return ContentService.createTextOutput(value)
   }
 
   public static json(payload: object): GoogleAppsScript.Content.TextOutput {
@@ -25,20 +25,26 @@ export class Transport {
     `)
   }
 
-  public static get(url: string): GoogleAppsScript.URL_Fetch.HTTPResponse {
-    return UrlFetchApp.fetch(url)
+  public static text(value: string): GoogleAppsScript.Content.TextOutput {
+    return ContentService.createTextOutput(value)
   }
 }
 
-interface FetchOption {
-  method?: HttpMethods,
-  contentType?: string,
-  payload?: string
-  headers?: object
-  validateHttpsCertificates?: boolean
-  followRedirects?: boolean
-  muteHttpExceptions?: boolean
+export interface FetchOption {
+  contentType?: string
   escaping?: boolean
+  followRedirects?: boolean
+  headers?: object
+  method?: HttpMethods
+  muteHttpExceptions?: boolean
+  payload?: string
+  validateHttpsCertificates?: boolean
 }
 
-enum HttpMethods { get, delete, patch, post, put }
+enum HttpMethods {
+  get,
+  delete,
+  patch,
+  post,
+  put,
+}

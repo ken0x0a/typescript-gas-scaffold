@@ -1,6 +1,6 @@
 export class Slack {
-  public url: string
   public config: SlackConfig
+  public url: string
 
   constructor(url: string, conf?: SlackConfig) {
     this.url = url
@@ -18,42 +18,42 @@ export class Slack {
 }
 
 interface SlackConfig {
-  username?: string,
-  icon_url?: string,
-  icon_emoji?: string,
-  channel?: string,
+  channel?: string
+  icon_emoji?: string
+  icon_url?: string
+  username?: string
 }
 
 interface SlackPayload {
-  text: string,
-  username?: string,
-  icon_url?: string,
-  icon_emoji?: string,
-  channel?: string,
   attachments?: SlackAttachment[]
+  channel?: string
+  icon_emoji?: string
+  icon_url?: string
+  text: string
+  username?: string
 }
 
 interface SlackAttachment {
+  author_icon?: string
+  author_link?: string
+  author_name?: string
+  color?: string
   // see https://api.slack.com/docs/message-attachments
-  fallback: string,
-  text?: string,
-  pretext?: string,
-  author_name?: string,
-  author_link?: string,
-  author_icon?: string,
-  title?: string,
-  title_link?: string,
-  color?: string,
-  image_url?: string,
-  thumb_url?: string,
-  footer?: string,
-  footer_icon?: string,
-  ts?: number,
+  fallback: string
   fields?: SlackAttachField[]
+  footer?: string
+  footer_icon?: string
+  image_url?: string
+  pretext?: string
+  text?: string
+  thumb_url?: string
+  title?: string
+  title_link?: string
+  ts?: number
 }
 
 interface SlackAttachField {
-  title?: string,
-  value?: string,
   short?: boolean
+  title?: string
+  value?: string
 }
